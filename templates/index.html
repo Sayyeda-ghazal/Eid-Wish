@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eid Mubarak Wish Card</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Outfit:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+
+  </head>
+  <body>
+    <main class="scene">
+      <div class="glow"></div>
+      <div class="pattern"></div>
+
+      <section class="card" aria-label="Eid Mubarak wish card">
+        <header class="card__header">
+          <p class="badge">Eid Greetings</p>
+          <h1>Eid Mubarak</h1>
+          <p class="subtitle">May your days be filled with light, love, and generous blessings.</p>
+        </header>
+
+        <div class="card__center">
+          <div class="moon">
+            <div class="moon__cut"></div>
+          </div>
+          <div class="lantern">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="stars">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+
+        <footer class="card__footer">
+          <p>Wishing you peace, prosperity, and a heart full of joy.</p>
+          <p class="signature">With warm wishes, <span>{{ sender_name }}</span></p>
+        </footer>
+      </section>
+
+      <section class="share" aria-label="Share this Eid card">
+        <div class="share__card">
+          <h2>Share this card</h2>
+          <p>Want to send this to someone else? Write your name and share the link.</p>
+          <form class="name-form" method="get" autocomplete="on">
+            <label for="from" class="name-label">Your name</label>
+            <div class="name-field">
+              <input
+                id="from"
+                name="from"
+                type="text"
+                placeholder="Your name"
+                maxlength="40"
+                value="{{ sender_name if sender_name != 'Your Name' else '' }}"
+                required
+              />
+              <button type="submit">Update Card</button>
+            </div>
+          </form>
+
+          <div class="share-link">
+            <input id="shareUrl" type="text" readonly />
+            <button id="whatsAppBtn" type="button">Share on WhatsApp</button>
+            <button id="copyBtn" type="button">Copy Link</button>
+          </div>
+          <p class="share-hint">Share directly on WhatsApp, or copy the link for anywhere else.</p>
+        </div>
+      </section>
+
+    </main>
+
+    <script>
+      const shareUrlInput = document.getElementById("shareUrl");
+      const whatsAppBtn = document.getElementById("whatsAppBtn");
+      const copyBtn = document.getElementById("copyBtn");
+      const params = new URLSearchParams(window.location.search);
+      const nameFromUrl = params.get("from") || "";
+      const baseUrl = "https://afterwards-done-hands-spots.trycloudflare.com" + window.location.pathname;
+      const shareUrl = nameFromUrl ? baseUrl + "?from=" + encodeURIComponent(nameFromUrl) : baseUrl;
+      shareUrlInput.value = shareUrl;
+      const shareText = "Eid Mubarak! " + shareUrl;
+
+      whatsAppBtn.addEventListener("click", () => {
+        const waUrl = "https://wa.me/?text=" + encodeURIComponent(shareText);
+        window.open(waUrl, "_blank", "noopener,noreferrer");
+      });
+
+      copyBtn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(shareUrlInput.value);
+          copyBtn.textContent = "Copied!";
+          setTimeout(() => (copyBtn.textContent = "Copy Link"), 1500);
+        } catch (err) {
+          shareUrlInput.select();
+          document.execCommand("copy");
+          copyBtn.textContent = "Copied!";
+          setTimeout(() => (copyBtn.textContent = "Copy Link"), 1500);
+        }
+      });
+    </script>
+  </body>
+</html>
