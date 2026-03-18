@@ -1,5 +1,7 @@
 {
   "routes": [
+    { "src": "/styles.css", "dest": "/styles.css" },
+    { "src": "/favicon.svg", "dest": "/favicon.svg" },
     { "src": "/(.*)", "dest": "api/index.py" }
   ]
 }
